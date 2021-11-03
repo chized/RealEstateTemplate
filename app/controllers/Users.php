@@ -304,7 +304,7 @@ class Users extends Controller
     }
     
     public function signup() {           
-        
+         
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             //die('submitted');
@@ -404,7 +404,7 @@ class Users extends Controller
                         https://cushyrealty.com/Users/activate?email='.$email.'&validityCode='.$validityCode.'&activationHash=' .$data['activationHash'] .'
                          
                         '; // Our message above including the link
-                  
+                   
                         sendmail($email, $subject, $msg);
                     //flash('signupSuccess', 'You have suceccesfully signed up, you can login, Check your email to activated account');
                     //redirect('Users/login');                   

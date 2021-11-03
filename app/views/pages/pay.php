@@ -1,7 +1,8 @@
 
-<?php include APPROOT. '/views/templates/header.php';?>
-<?php
+<?php 
+  include APPROOT. '/views/templates/header.php';
   print_r($data['sessionItems']);
+  print_r($data['user_data']);
   //echo $_SESSION['checkout']['propertyName'];
 ?>
   <?php flash('checkoutInfo'); ?>
@@ -58,14 +59,14 @@
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="firstName">First name *</label>
-            <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+            <input type="text" class="form-control" id="firstName" placeholder="" value="<?php echo $data['user_data']->firstName; ?>" readonly required>
             <div class="invalid-feedback">
               Valid first name is required.
             </div>
           </div>
           <div class="col-md-6 mb-3">
             <label for="lastName">Last name *</label>
-            <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+            <input type="text" class="form-control" id="lastName" placeholder="" value="<?php echo $data['user_data']->surname; ?>" readonly required>
             <div class="invalid-feedback">
               Valid last name is required.
             </div>
@@ -86,8 +87,8 @@
         </div>
 
         <div class="mb-3">
-          <label for="email">Email *<span class="text-muted">(Optional)</span></label>
-          <input type="email" class="form-control" id="email" placeholder="you@example.com">
+          <label for="email">Email *<span class="text-muted">(Required)</span></label>
+          <input type="email" class="form-control" id="email" placeholder="you@example.com" value="<?php echo $data['user_data']->email; ?>" readonly>
           <div class="invalid-feedback">
             Please enter a valid email address for any updates.
           </div>
@@ -144,9 +145,12 @@
           
         </div> -->
         <input type="hidden" name="amount" value="<?php echo $data['total']  ; ?>">
+        <input type="hidden" name="email" value="<?php echo $data['user_data']->email;?>">
+        <input type="hidden" name="user_id" value="<?php echo $data['user_data']->userId ;?>">
+
         <hr class="mb-4">
         <!-- <button type="submit" onclick="payWithPaystack()" class="btn btn-primary btn-lg btn-block"> Pay </button> -->
-        <button class="btn btn-primary btn-lg btn-block" type="submit" formaction="<?php echo URLROOT; ?>/CheckoutPay/initpay" >Continue to checkout</button>
+        <button class="btn btn-primary btn-lg btn-block" type="submit" formaction="<?php echo URLROOT; ?>/CheckoutPay/initpay" formmethod='POST' >Continue to checkout</button>
       </form>
     </div>
   </div>

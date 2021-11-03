@@ -1,70 +1,118 @@
 <?php
     class CheckoutPay extends Controller{
 
-        public function initpay(){
-            $this->view('pages/paystackpay');//, $data); 
+        public function __construct()
+        {
+            $this->userModel = $this->model('User'); 
         }
+        public function initpay(){
+
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            
+            $data_x = $_POST ? $_POST : [];
+
+            $data = [
+                'sessionItems' => $_SESSION['checkout'],
+                'total' => array_sum(array_column($_SESSION['checkout'],'propertyPrice'))
+            ];
+
+
+            $this->view('pages/paystackpay', $data + $data_x); 
+        }
+
         public function paystackpay(){
             if(!isLoggedIn()){
                 redirect('users/login');
             }
-            $url = "https://api.paystack.co/transaction/initialize";
 
-            $fields = [
-          
-              'email' => "customer@email.com",
-          
-              'amount' => "20000"
-          
-            ];
-          
-            $fields_string = http_build_query($fields);
-          
-            //open connection
-          
-            $ch = curl_init();
-          
-            
-          
-            //set the url, number of POST vars, POST data
-          
-            curl_setopt($ch,CURLOPT_URL, $url);
-          
-            curl_setopt($ch,CURLOPT_POST, true);
-          
-            curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-          
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-          
-              "Authorization: sk_test_de926022d1d416ea73f77240b4c85f750c992626;",
-          
-              "Cache-Control: no-cache",
-          
-            ));
-          
-            
-          
-            //So that curl_exec returns the contents of the cURL; rather than echoing it
-          
-            curl_setopt($ch,CURLOPT_RETURNTRANSFER, true); 
-          
-            
-          
-            //execute post
-          
-            $result = curl_exec($ch);
-          
-            echo $result;
-            $this->view('pages/paystackpay', $data);   
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+            //get input
+            $user_id = $_POST['user_id'];
+            $email = $_POST['email'];
+            $amount = $_POST['amount'];
+           
+            /*print_r($_POST);
+            exit();*/
+            if ($email && $amount) {
+
+                //convert amount
+                $amount *= 100;
+                
+                // return to this url after payment
+                $callback_url = 'https://localhost/cushy/CheckoutPay/verify_payment';
+
+                //api key
+                $api_key = 'sk_test_de926022d1d416ea73f77240b4c85f750c992626';
+                $url = "https://api.paystack.co/transaction/initialize";
+
+                $fields = [
+                  'email' => $email,
+                  'amount' => $amount,
+                  'callback_url' => $callback_url,
+                ];
+
+              
+                $fields_string = http_build_query($fields);
+              
+                //open connection
+                $curl = curl_init();
+              
+                //set the url, number of POST vars, POST data
+              
+                curl_setopt($curl,CURLOPT_URL, $url);
+                curl_setopt($curl,CURLOPT_POST, true);
+                curl_setopt($curl,CURLOPT_POSTFIELDS, $fields_string);
+                curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                  "Authorization: Bearer $api_key",
+                  "Cache-Control: no-cache",
+              
+                ));
+              
+                //So that curl_exec returns the contents of the cURL; rather than echoing it
+              
+                curl_setopt($curl,CURLOPT_RETURNTRANSFER, true); 
+              
+                //execute post
+                $ps_data = curl_exec($curl);
+                $ps_data = json_decode($ps_data);
+                //validate
+                if ($ps_data) {
+                    /*print_r($ps_data);
+                    exit();*/
+                    $ps_data = $ps_data->data;
+                    $auth_url = $ps_data->authorization_url;
+                    $access_code = $ps_data->access_code;
+                    $reference = $ps_data->reference;
+
+                    //add DB logic here
+                    //eg insert or update invoice with paystack fields
+
+                    //redirect to Paystack
+                    header("Location: $auth_url",true,301);
+                    exit();
+                }
+                
+                exit();
+            }
+            //$this->view('pages/paystackpay', $data);   
         }
         
         public function addToCart($propertyId){
             if(!isLoggedIn()){
                 redirect('users/login');
             }
+
             //$count = 0;
             $propIds = [];
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+            //get logged user data
+            $userId = $_SESSION['userId'];
+            $user_dt = $this->userModel->getUserById($userId);
+            
+               // print_r($user_dt);
+
                 if(isset($_POST['addToCart'])){
                     if(isset($_SESSION['checkout'])){
                         //To keep track of the number of properties added to checkout cart
@@ -84,6 +132,9 @@
                                 'count' => $count,
                                 'total' => array_sum(array_column($_SESSION['checkout'],'propertyPrice'))
                             ];
+
+
+                            $data['user_data'] = $user_dt;
                             $this->view('pages/pay', $data);
                         }else{ 
                                 flash('checkoutInfo', 'This property is already selected for checkout');
@@ -91,7 +142,10 @@
                                     'sessionItems' => $_SESSION['checkout'],
                                     'count' => $count,
                                     'total' => array_sum(array_column($_SESSION['checkout'],'propertyPrice'))
-                                ];;  
+                                ];
+
+
+                        $data['user_data'] = $user_dt;
                         $this->view('pages/pay', $data);
                         }
                        
@@ -108,6 +162,8 @@
                         'count' => $count,
                         'total' => array_sum(array_column($_SESSION['checkout'],'propertyPrice'))
                     ];
+
+                    $data['user_data'] = $user_dt;
                     $this->view('pages/pay', $data);   
                 }         
                 }   
