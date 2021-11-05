@@ -3,7 +3,8 @@
 
         public function __construct()
         {
-            $this->userModel = $this->model('User'); 
+            $this->userModel = $this->model('User');
+            $this->propertyModel = $this->model('Property');
         }
         public function initpay(){
 
@@ -31,8 +32,10 @@
             $user_id = $_POST['user_id'];
             $email = $_POST['email'];
             $amount = $_POST['amount'];
+            $trans_id = $user_id.'_'.uniqid();
+            $items =  $_SESSION['checkout'];
            
-            /*print_r($_POST);
+            /*print_r($items);
             exit();*/
             if ($email && $amount) {
 
@@ -76,6 +79,7 @@
                 //execute post
                 $ps_data = curl_exec($curl);
                 $ps_data = json_decode($ps_data);
+
                 //validate
                 if ($ps_data) {
                     /*print_r($ps_data);
@@ -85,8 +89,22 @@
                     $access_code = $ps_data->access_code;
                     $reference = $ps_data->reference;
 
-                    //add DB logic here
-                    //eg insert or update invoice with paystack fields
+                    //looping through items
+                    foreach ($items as $item) {
+                        
+                        $prop_id = $item['propertyId'];
+                        
+                        $db_data = [
+                            'prop_id' => $prop_id, 'user_id' => $user_id, 
+                            'trans_id' => $trans_id, 'auth_url' => $auth_url, 
+                            'access_code' => $access_code, 'reference' => $reference, 
+
+                            ];
+                        //add DB logic here
+                        //eg insert or update invoice with paystack fields
+                        $add_item = $this->propertyModel->addCartItem($db_data);
+                        //print_r($item);
+                    }
 
                     //redirect to Paystack
                     header("Location: $auth_url",true,301);

@@ -331,4 +331,22 @@ class Property{
             return false;
         }
     }
+
+    public function addCartItem($data){
+        $this->db->query('INSERT INTO cartitems ( propertyId, userId, transactionId, authUrl, accessCode, reference) VALUES ( :propertyId, :userId, :transactionId, :authUrl, :accessCode, :reference)');
+        
+                //Bind query
+                $this->db->bind(':propertyId', $data['prop_id']);
+                $this->db->bind(':userId', $data['user_id']);
+                $this->db->bind(':transactionId', $data['trans_id']);
+                $this->db->bind(':authUrl', $data['auth_url']);
+                $this->db->bind(':accessCode', $data['access_code']);
+                $this->db->bind(':reference', $data['reference']);
+                //Execute query
+                if($this->db->execute()){
+                    return true;
+                }else{
+                    return false;
+                }
+    }
 }
