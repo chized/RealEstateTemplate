@@ -43,9 +43,12 @@
             <span class="invalid-feedback"><?php echo $data['emailErr']; ?></span>
           </div>
           <div class="form-group">
+
+            <span class="alert alert-danger m-2" id="pword_err"></span>
+
             <label for="password">Password: <sup>*</sup></label>
               <div class="input-group" id="showHidePassword">
-              <input type="password" name="password" class="form-control form-control-lg <?php echo (!empty($data['passwordErr'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['password']; ?>">
+              <input type="password" name="password" id="pword" class="form-control form-control-lg <?php echo (!empty($data['passwordErr'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['password']; ?>" data-toggle="tooltip" data-placement="top" >
               <div class="input-group-addon border"><a class = "p-2" href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a></div>
               </div>
             <span class="invalid-feedback"><?php echo $data['passwordErr']; ?></span>
@@ -53,7 +56,7 @@
           <div class="form-group">
             <label for="confirmPassword">Confirm Password: <sup>*</sup></label>
             <div class="input-group" id="showHideConfirmPassword">
-            <input type="password" name="confirmPassword" class="form-control form-control-lg <?php echo (!empty($data['confirmPasswordErr'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['confirmPassword']; ?>">
+            <input type="password" name="confirmPassword" id="confirmPassword" class="form-control form-control-lg <?php echo (!empty($data['confirmPasswordErr'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['confirmPassword']; ?>">
             <div class="input-group-addon border"><a class = "p-2" href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a></div>
             </div>
             <span class="invalid-feedback"><?php echo $data['confirmPasswordErr']; ?></span>
