@@ -6,7 +6,12 @@ class Properties extends Controller{
             $this->propertyModel = $this->model('Property');
             $this->userModel = $this->model('User');
         }
-       
+        
+        public function error404()
+        {
+          $this->view('pages/user/error404');
+        }
+
         public function index() 
         {
             $properties = $this->propertyModel->getProperties();

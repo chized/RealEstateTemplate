@@ -44,8 +44,7 @@
           </div>
           <div class="form-group">
 
-            <span class="alert alert-danger m-2" id="pword_err"></span>
-
+            
             <label for="password">Password: <sup>*</sup></label>
               <div class="input-group" id="showHidePassword">
               <input type="password" name="password" id="pword" class="form-control form-control-lg <?php echo (!empty($data['passwordErr'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['password']; ?>" data-toggle="tooltip" data-placement="top" >

@@ -4,6 +4,10 @@
 class Users extends Controller
 {
      
+    public function error404(){
+        $this->view('pages/user/error404');
+    }
+
     public function index(){
         $this->view('pages/user/account');
     }

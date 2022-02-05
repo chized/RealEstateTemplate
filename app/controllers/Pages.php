@@ -24,6 +24,11 @@ class Pages extends Controller
       $this->view('pages/pagesAccessErrors');
     }
 
+    public function error404()
+    {
+      $this->view('pages/user/error404');
+    }
+
     public function aboutus(){
       $this->view('pages/aboutus');
     }
