@@ -141,45 +141,47 @@ $(function() {    // Makes sure the code contained doesn't run until
 //     });
     
 //    });
-  
 
-    
     $(document).ready(() => {
-        $('#pword_err').hide();
 
+        $('#pword_err').hide();
         $('[data-toggle="tooltip"]').tooltip();   
         
         $('#pword').on('input',() =>{
-          const pword = $('#pword').val();
-          const msg = validate_string(pword);
-          $('#pword').attr('title', msg);
+            const pword = $('#pword').val();
+            const msg = validate_string(pword);
 
-          alert(msg);
+            if (msg) {
+                $('#pword_err').html(msg);
+                $('#pword_err').show().addClass('text-danger');
+            }else{
+                $('#pword_err').hide().removeClass('text-danger');
+            }
+
         });
 
-        const validate_string = (str) =>{
-         
-          var msg = '';
+        const validate_string = (str) => {
+            var msg = '';
           
-          if(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(str) ) {
-            //alert('Input: has symbol');
-          }else{
-            msg += 'has no symbol ';
-          }
+            if(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(str) ) {
+                //alert('Input: has symbol');
+            }else{
+                msg += 'has no symbol ';
+            }
 
-          if(/\d/.test(str) ) {
-            //alert('Input: has number');
-          }else{
-             msg += 'has no number ';
-          }
+            if(/\d/.test(str) ) {
+                //alert('Input: has number');
+            }else{
+               msg += 'has no number ';
+            }
 
-          if(/[a-zA-Z]/.test(str) ) {
-            //alert('Input: has alphabet');
-          }else{
-             msg += 'has no alphabet';
-          }
+            if(/[a-zA-Z]/.test(str) ) {
+                //alert('Input: has alphabet');
+            }else{
+                msg += 'has no alphabet ';
+            }
 
-          return msg;     
+            return msg;     
         }
 
     });

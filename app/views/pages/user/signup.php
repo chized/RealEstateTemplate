@@ -43,7 +43,9 @@
             <span class="invalid-feedback"><?php echo $data['emailErr']; ?></span>
           </div>
           <div class="form-group">
-
+            <div class="mb-2 text-left">
+              <small id="pword_err" class="" ></small>
+            </div>
             
             <label for="password">Password: <sup>*</sup></label>
               <div class="input-group" id="showHidePassword">
