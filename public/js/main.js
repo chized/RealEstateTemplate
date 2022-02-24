@@ -154,7 +154,7 @@ $(function() {    // Makes sure the code contained doesn't run until
           const msg = validate_string(pword);
           $('#pword').attr('title', msg);
 
-          alert(msg);
+          //alert(msg);
         });
 
         const validate_string = (str) =>{

@@ -57,7 +57,7 @@
                 </div>
           </div>
       </div>
-<!-- <div class="row">
+ <div class="row">
             <div class="col">
             <h2 class="text-center">Reviews and Ratings</h2>
 	
@@ -118,6 +118,6 @@
             </div>
             <div class="col"></div>
         </div>
-  </div> -->
+  </div>
 
 <?php  include APPROOT. "/views/templates/footer.php"; ?>
