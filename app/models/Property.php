@@ -10,7 +10,7 @@ class Property{
         $this->db->query('SELECT p.*, p.propertyId as propertyId, i.imageUrl as imageUrl 
                         FROM properties p LEFT OUTER JOIN images i 
                         ON p.propertyId = i.propertyId 
-                        WHERE p.isActive = 1');
+                        WHERE p.isActive = 1  GROUP BY p.propertyId');
 
         $results = $this->db->resultSet();
 

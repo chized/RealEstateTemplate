@@ -3,7 +3,7 @@
   
   <div class="container-xl">
       <div class="row">
-          <div class="col">
+          <div class="col-md-12 mb-5">
             <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
                     <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
@@ -33,7 +33,7 @@
                 </div>
           </div>
           <?php //print_r($data['image']); ?>
-          <div class="col">
+          <div class="col-md-6">
               <div class="card" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title"><?php echo $data['property']->propertyName; ?></h5>
