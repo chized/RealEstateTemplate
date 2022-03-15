@@ -183,5 +183,67 @@ $(function() {    // Makes sure the code contained doesn't run until
 
             return msg;     
         }
+        
+
+        //keep track
+        var ratedId = -1;
+
+
+        var userRatedId = localStorage.getItem('ratedId');
+        userRatedId = parseInt(userRatedId);
+
+        /* Start of Functions  */
+        const setStars = (max) =>{
+          for (var i = 0; i <= max; i++) {
+              $('.main-star:eq('+ i +')').css('color', 'gold');
+            }
+        };
+
+        const resetStarColor = () =>{
+          $('.main-star').css('color', 'white');
+        };
+        
+
+        /* End of Functions */
+
+        resetStarColor();
+
+        //when user already rated
+        /* if (userRatedId != null) {
+          setStars(userRatedId);
+        } */
+        
+        
+        $('.main-star').on('click',(e) => {
+          ratedId = $(e.target).data("id");
+          localStorage.setItem('ratedId', ratedId);
+          setStars(parseInt(ratedId));
+          const current_url = $('#current_url').val();
+
+          $('#user_rating').val(ratedId + 1);
+          //localStorage.setItem('uId', res.id);
+        });
+
+
+        $('.main-star').mouseover((e) => {
+          resetStarColor();
+
+          var currentIndex = $(e.target).data("id");
+          //console.log(currentIndex);
+          setStars(currentIndex);
+
+        });
+
+        $('.main-star').mouseleave(() => {
+          resetStarColor();
+        
+          if (ratedId == -1) {
+            setStars(userRatedId);
+          }else{
+            setStars(ratedId);
+          }
+
+        });
+
 
     });

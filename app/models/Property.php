@@ -348,5 +348,41 @@ class Property{
                 }else{
                     return false;
                 }
+    } 
+
+    public function getPropertyReviews($data){
+        $this->db->query('SELECT rev.*, us.firstName, us.surname FROM reviews rev, users us WHERE rev.propertyId = :propertyId AND rev.userId = us.userId ORDER BY rev.id DESC LIMIT 10');
+        $this->db->bind(':propertyId', $data['propertyId']);
+        $results = $this->db->resultSet();
+
+        return $results;
+    }
+
+    public function getUserPropertyReview($data){
+        $this->db->query('SELECT * FROM reviews WHERE propertyId = :propertyId AND userId = :userId LIMIT 1');
+        $this->db->bind(':propertyId', $data['propertyId']);
+        $this->db->bind(':userId', $data['userId']);
+
+        $result = $this->db->resultSet();
+
+        return $result;
+    }
+
+    public function addPropertyReview($data){
+        $this->db->query('INSERT INTO reviews (userId, propertyId, rating, msg) VALUES ( :userId, :propertyId, :rating, :msg)');
+
+        //Bind query
+        $this->db->bind(':userId', $data['userId']);
+        $this->db->bind(':propertyId', $data['propertyId']);
+        $this->db->bind(':rating', $data['rating']);
+        $this->db->bind(':msg', $data['msg']);
+        
+
+        //Execute query
+        if($this->db->execute()){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
